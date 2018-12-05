@@ -9,24 +9,24 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // include database and object files
 include_once '../config/connection.php';
-include_once '../objects/items.php';
+include_once '../objects/categories.php';
  
 // instantiate database 
 $connection = new Connection();
 $db = $connection->getConnection();
  
 // initialize object
-$items = new Items($db);
+$Categories = new Categories($db);
  
 $data = json_decode(file_get_contents("php://input"));
 
 if(!empty($data->name)) {
 
-    $items->name = $data->name;
-    $items->categoryId = $data->categoryId;
-    $items->companyId = $data->companyId;
+    $Categories->name = $data->name;
+    $Categories->description = $data->description;
+    $Categories->companyId = $data->companyId;
 
-    if($items->create()){
+    if($Categories->create()){
         http_response_code(200);
         echo json_encode(array("Message" => "Success", "Status" => "200"));
     } else{

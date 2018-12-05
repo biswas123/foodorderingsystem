@@ -1,15 +1,15 @@
 <?php
 
-class Items{
+class Categories{
  
     // database connection and table name
     private $conn;
-    private $table_name = "items";
+    private $table_name = "categories";
  
     // object properties
     public $id;
     public $name;
-    public $categoryId;
+    public $description;
     public $companyId;
  
     // constructor with $db as database connection
@@ -20,16 +20,13 @@ class Items{
     public function create(){
         $conn = $this->conn;
         // query to insert record
-        $query = "INSERT INTO `items` (`Name`, `CategoryId`, `CompanyId`) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("sii", $this->name, $this->categoryId, $this->companyId);
-      
-        //fetching result would go here, but will be covered later
-        if ($stmt->execute() or die(mysqli_error($conn))) {
-            $stmt->close();
+        $query = "INSERT INTO `categories` (`Name`, `Description`, `CompanyId`) VALUES ('$this->name', '$this->description', '$this->companyId');";
+                             
+        if (mysqli_query($conn,$query) or die(mysqli_error($conn))) {
+            mysqli_close($conn);
             return true;
         } else {
-            $stmt->close();
+            mysqli_close($conn);
             return false;
         }
                  
