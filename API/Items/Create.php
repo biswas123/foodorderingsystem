@@ -16,23 +16,34 @@ $connection = new Connection();
 $db = $connection->getConnection();
  
 // initialize object
-$items = new Items($db);
+$Items = new Items($db);
  
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->name)) {
+if (!empty($data->name) &&  !empty($data->categoryId) && !empty($data->companyId)) {
 
-    $items->name = $data->name;
-    $items->categoryId = $data->categoryId;
-    $items->companyId = $data->companyId;
-
-    if($items->create()){
+    $Items->name = $data->name;
+    $Items->descrpition = $data->description  ?? NULL;
+    $Items->price = $data->price  ?? 0;
+    $Items->available = $data->available  ?? 1;
+    $Items->image = $data->image ?? NULL;
+    
+    $Items->categoryId = $data->categoryId;
+    $Items->companyId = $data->companyId;
+    
+    if ($Items->create()) {
         http_response_code(200);
         echo json_encode(array("Message" => "Success", "Status" => "200"));
-    } else{
+    } else {
         http_response_code(500);
         echo json_encode(array("Message" => "Error", "Status" => "500"));
     }
+
+} else {
+    
+    http_response_code(403);
+    echo json_encode(array("Message" => "Insufficient or wrong parameters.", "Status" => "403"));
+
 }
 
 ?>

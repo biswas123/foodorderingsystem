@@ -20,10 +20,10 @@ $Categories = new Categories($db);
  
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->name)) {
+if(!empty($data->name) && !empty($data->companyId)) {
 
     $Categories->name = $data->name;
-    $Categories->description = $data->description;
+    $Categories->description = $data->description ?? NULL;
     $Categories->companyId = $data->companyId;
 
     if($Categories->create()){
@@ -33,6 +33,11 @@ if(!empty($data->name)) {
         http_response_code(500);
         echo json_encode(array("Message" => "Error", "Status" => "500"));
     }
+} else {
+    
+    http_response_code(403);
+    echo json_encode(array("Message" => "Insufficient or wrong parameters.", "Status" => "403"));
+
 }
 
 ?>
