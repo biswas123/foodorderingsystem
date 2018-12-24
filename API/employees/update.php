@@ -24,7 +24,7 @@ if(!empty($data->employeeId)  && !empty($data->username) && !empty($data->passwo
 
     $Employees->employeeId = $data->employeeId; 
     $Employees->username = $data->username ;
-    $Employees->password = $data->password;
+    $Employees->password = password_hash($data->password, PASSWORD_DEFAULT);
     $Employees->roleId = $data->roleId;
 
     if($returnVal = $Employees->update()){

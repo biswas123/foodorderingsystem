@@ -23,10 +23,10 @@ $data = json_decode(file_get_contents("php://input"));
 if (!empty($data->username) &&  !empty($data->password) && !empty($data->roleId) && !empty($data->companyId)) {
 
     $Employees->username = $data->username;
-    $Employees->password = $data->password;
+    $Employees->password = password_hash($data->password, PASSWORD_DEFAULT);
     $Employees->roleId = $data->roleId;
     $Employees->companyId = $data->companyId;
-    
+     
     if ($Employees->create()) {
         http_response_code(200);
         echo json_encode(array("Message" => "Success", "Status" => "200"));
