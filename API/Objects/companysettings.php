@@ -1,14 +1,14 @@
 <?php
 
-class Categories{
+class CompanySettings{
  
     // database connection and table name
     private $conn;
  
     // object properties
-    public $categoryId;
+    public $settingId;
     public $name;
-    public $description;
+    public $value;
     public $companyId;
  
     // constructor with $db as database connection
@@ -19,9 +19,9 @@ class Categories{
     public function create(){
         
         $conn = $this->conn;
-        $query = "INSERT INTO `categories` (`Name`, `Description`, `CompanyId`) VALUES (?, ?, ?)";
+        $query = "INSERT INTO `companysettings` (`Name`, `Value`, `CompanyId`) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $this->name, $this->description, $this->companyId);
+        $stmt->bind_param("ssi", $this->name, $this->value, $this->companyId);
       
         if ($stmt->execute()) {
             $stmt->close();
@@ -39,7 +39,7 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `categories` WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `Name` ASC";
+        $query = "SELECT * FROM `companysettings` WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `Name` ASC";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $this->companyId);
         $stmt->execute();
@@ -61,9 +61,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `categories` WHERE DateDeleted IS NULL AND `categoryID` = ?";
+        $query = "SELECT * FROM `companysettings` WHERE DateDeleted IS NULL AND `SettingID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $this->categoryId);
+        $stmt->bind_param("i", $this->settingId);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -82,9 +82,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `categories` SET `name` = ?, `description` = ? WHERE`categoryID` = ?";
+        $query = "UPDATE `companysettings` SET `name` = ?, `value` = ? WHERE`SettingID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $this->name, $this->description, $this->categoryId);
+        $stmt->bind_param("ssi", $this->name, $this->value, $this->settingId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 
@@ -101,9 +101,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `categories` SET `DateDeleted` = now() WHERE`categoryID` = ?";
+        $query = "UPDATE `companysettings` SET `DateDeleted` = now() WHERE`SettingID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $this->categoryId);
+        $stmt->bind_param("i", $this->settingId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 

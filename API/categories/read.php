@@ -20,14 +20,20 @@ $Categories = new Categories($db);
  
 $data = json_decode(file_get_contents("php://input"));
 
+if(!empty($data->companyId)){
+    $Categories->companyId = $data->companyId;
+    if($returnVal = $Categories->read()){
+        http_response_code(200);
+        echo json_encode(array("Message" => $returnVal, "Status" => "200"));
+    } else{
+        http_response_code(500);
+        echo json_encode(array("Message" => "Error", "Status" => "500"));
+    }
+} else {
+    
+    http_response_code(403);
+    echo json_encode(array("Message" => "Insufficient or wrong parameters.", "Status" => "403"));
 
-if($returnVal = $Categories->read()){
-    http_response_code(200);
-    echo json_encode(array("Message" => $returnVal, "Status" => "200"));
-} else{
-    http_response_code(500);
-    echo json_encode(array("Message" => "Error", "Status" => "500"));
 }
-
 
 ?>

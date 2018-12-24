@@ -9,26 +9,31 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // include database and object files
 include_once '../config/connection.php';
-include_once '../objects/items.php';
+include_once '../objects/companysettings.php';
  
 // instantiate database 
 $connection = new Connection();
 $db = $connection->getConnection();
  
 // initialize object
-$Items = new Items($db);
+$CompanySettings = new CompanySettings($db);
  
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->companyId)){
-    $Items->companyId = $data->companyId;
-    if($returnVal = $Items->read()){
+if(!empty($data->settingId)){
+
+    $CompanySettings->settingId = $data->settingId; 
+    $CompanySettings->name = $data->name ?? NULL;
+    $CompanySettings->value = $data->value ?? NULL;
+
+    if($returnVal = $CompanySettings->update()){
         http_response_code(200);
-        echo json_encode(array("Message" => $returnVal, "Status" => "200"));
+        echo json_encode(array("Message" => "Success", "Status" => "200"));
     } else{
         http_response_code(500);
         echo json_encode(array("Message" => "Error", "Status" => "500"));
     }
+    
 } else {
     
     http_response_code(403);

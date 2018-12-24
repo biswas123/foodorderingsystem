@@ -1,15 +1,17 @@
 <?php
 
-class Categories{
+class Employees{
  
     // database connection and table name
     private $conn;
  
     // object properties
-    public $categoryId;
-    public $name;
-    public $description;
+    public $employeeId;
+    public $username;
+    public $password;
+    public $roleId;
     public $companyId;
+    
  
     // constructor with $db as database connection
     public function __construct($db){
@@ -17,11 +19,10 @@ class Categories{
     }
 
     public function create(){
-        
         $conn = $this->conn;
-        $query = "INSERT INTO `categories` (`Name`, `Description`, `CompanyId`) VALUES (?, ?, ?)";
+        $query = "INSERT INTO `employees` (`UserName`,`Password`, `RoleID`, `CompanyID`) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $this->name, $this->description, $this->companyId);
+        $stmt->bind_param("ssii", $this->username, $this->password, $this->roleId, $this->companyId);
       
         if ($stmt->execute()) {
             $stmt->close();
@@ -32,14 +33,15 @@ class Categories{
             $stmt->close();
             return false;
         }
+                 
     }
-    
+
     public function read(){
         
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `categories` WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `Name` ASC";
+        $query = "SELECT * FROM `employees`  WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `UserName` ASC";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $this->companyId);
         $stmt->execute();
@@ -61,9 +63,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `categories` WHERE DateDeleted IS NULL AND `categoryID` = ?";
+        $query = "SELECT * FROM `employees` WHERE DateDeleted IS NULL AND `EmployeeID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $this->categoryId);
+        $stmt->bind_param("i", $this->employeeId);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -82,9 +84,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `categories` SET `name` = ?, `description` = ? WHERE`categoryID` = ?";
+        $query = "UPDATE `employees` SET `UserName` = ?, `Password` = ?, `RoleId` = ? WHERE `EmployeeID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $this->name, $this->description, $this->categoryId);
+        $stmt->bind_param("ssii", $this->username, $this->password, $this->roleId, $this->employeeId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 
@@ -101,9 +103,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `categories` SET `DateDeleted` = now() WHERE`categoryID` = ?";
+        $query = "UPDATE `employees` SET `DateDeleted` = now() WHERE`EmployeeID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $this->categoryId);
+        $stmt->bind_param("i", $this->employeeId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 
@@ -115,6 +117,7 @@ class Categories{
             return false;
         }
     }
+    
 }
 
 ?>

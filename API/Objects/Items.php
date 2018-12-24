@@ -44,9 +44,9 @@ class Items{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `items` WHERE DateDeleted IS NULL ORDER BY `Name` ASC";
+        $query = "SELECT * FROM `items`  WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `Name` ASC";
         $stmt = $conn->prepare($query);
-      
+        $stmt->bind_param("i", $this->companyId);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -87,7 +87,7 @@ class Items{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `items` SET `name` = ?, `description` = ?, `price` = ?, `available` = ?, `image` = ?, `categoryId` = ? WHERE`itemID` = ?";
+        $query = "UPDATE `items` SET `name` = ?, `description` = ?, `price` = ?, `available` = ?, `image` = ?, `categoryId` = ? WHERE `itemID` = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ssiisii", $this->name, $this->description, $this->price, $this->available, $this->image, $this->categoryId, $this->itemId);
         $stmt->execute();
