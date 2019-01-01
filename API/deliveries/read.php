@@ -9,36 +9,31 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // include database and object files
 include_once '../config/connection.php';
-include_once '../objects/categories.php';
+include_once '../objects/deliveries.php';
  
 // instantiate database 
 $connection = new Connection();
 $db = $connection->getConnection();
  
 // initialize object
-$Categories = new Categories($db);
+$Deliveries = new Deliveries($db);
  
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->name) && !empty($data->companyId)) {
-
-    $Categories->name = $data->name;
-    $Categories->description = $data->description ?? NULL;
-    $Categories->companyId = $data->companyId;
-    $Categories->image = $data->image ?? NULL;
-
-    if($Categories->create()){
+//if(!empty($data->companyId)){
+   // $Deliveries->companyId = $data->companyId;
+    if($returnVal = $Deliveries->read()){
         http_response_code(200);
-        echo json_encode(array("Message" => "Success", "Status" => "200"));
+        echo json_encode(array("Message" => $returnVal, "Status" => "200"));
     } else{
         http_response_code(500);
         echo json_encode(array("Message" => "Error", "Status" => "500"));
     }
-} else {
+//} else {
     
-    http_response_code(403);
-    echo json_encode(array("Message" => "Insufficient or wrong parameters.", "Status" => "403"));
+  //  http_response_code(403);
+  //  echo json_encode(array("Message" => "Insufficient or wrong parameters.", "Status" => "403"));
 
-}
+//}
 
 ?>

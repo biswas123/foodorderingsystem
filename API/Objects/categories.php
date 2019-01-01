@@ -10,6 +10,7 @@ class Categories{
     public $name;
     public $description;
     public $companyId;
+    public $image;
  
     // constructor with $db as database connection
     public function __construct($db){
@@ -19,9 +20,9 @@ class Categories{
     public function create(){
         
         $conn = $this->conn;
-        $query = "INSERT INTO `categories` (`Name`, `Description`, `CompanyId`) VALUES (?, ?, ?)";
+        $query = "INSERT INTO `categories` (`Name`, `Description`, `CompanyId`, `Image`) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $this->name, $this->description, $this->companyId);
+        $stmt->bind_param("ssis", $this->name, $this->description, $this->companyId, $this->image);
       
         if ($stmt->execute()) {
             $stmt->close();
@@ -82,9 +83,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `categories` SET `name` = ?, `description` = ? WHERE`categoryID` = ?";
+        $query = "UPDATE `categories` SET `Name` = ?, `Description` = ?, `Image` = ? WHERE`categoryID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $this->name, $this->description, $this->categoryId);
+        $stmt->bind_param("ssis", $this->name, $this->description, $this->categoryId, $this->image);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 

@@ -1,20 +1,17 @@
 <?php
 
-class Items{
+class DeliveryAddresses{
  
     // database connection and table name
     private $conn;
  
     // object properties
-    public $itemId;
+    public $deliveryAddressId;
     public $name;
-    public $descrpition;
-    public $price;
-    public $available;
-    public $image;    
-    public $categoryId;
-    public $companyId;
-    
+    public $description;
+    public $latitude;
+    public $longitude;
+    public $customerId;
  
     // constructor with $db as database connection
     public function __construct($db){
@@ -22,10 +19,11 @@ class Items{
     }
 
     public function create(){
+        
         $conn = $this->conn;
-        $query = "INSERT INTO `items` (`Name`,`Description`, `Price`,`available`, `image`, `CategoryId`, `CompanyId`) VALUES (?, ?, ?,?,?,?,?)";
+        $query = "INSERT INTO `deliveryaddress` (`Name`, `Description`, `Latitude`, `Longitude`, `CustomerId`) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssiisii", $this->name, $this->descrpition, $this->price, $this->available, $this->image, $this->categoryId, $this->companyId);
+        $stmt->bind_param("ssssi", $this->name, $this->description, $this->latitude, $this->longitude, $this->customerId);
       
         if ($stmt->execute()) {
             $stmt->close();
@@ -36,17 +34,16 @@ class Items{
             $stmt->close();
             return false;
         }
-                 
     }
-
+    
     public function read(){
         
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `items`  WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `Name` ASC";
+        $query = "SELECT * FROM `deliveryaddress` WHERE `CustomerID` = ? AND DateDeleted IS NULL ORDER BY `Name` ASC";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $this->companyId);
+        $stmt->bind_param("i", $this->customerId);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -66,9 +63,9 @@ class Items{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `items` WHERE DateDeleted IS NULL AND `ItemID` = ?";
+        $query = "SELECT * FROM `deliveryaddress` WHERE DateDeleted IS NULL AND `CustomerId` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $this->itemId);
+        $stmt->bind_param("i", $this->customerId);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -87,9 +84,9 @@ class Items{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `items` SET `name` = ?, `description` = ?, `price` = ?, `available` = ?, `image` = ?, `categoryId` = ? WHERE `itemID` = ?";
+        $query = "UPDATE `deliveryaddress` SET `Name` = ?, `Description` = ?, `latitude` = ?, `longitude` = ? WHERE `DeliveryAddressId` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssiisii", $this->name, $this->description, $this->price, $this->available, $this->image, $this->categoryId, $this->itemId);
+        $stmt->bind_param("ssssi", $this->name, $this->description, $this->latitude, $this->longitude, $this->deliveryAddressId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 
@@ -106,9 +103,9 @@ class Items{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `items` SET `DateDeleted` = now() WHERE `ItemID` = ?";
+        $query = "UPDATE `deliveryaddress` SET `DateDeleted` = now() WHERE `DeliveryAddressID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $this->itemId);
+        $stmt->bind_param("i", $this->deliveryAddressId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 
@@ -120,7 +117,6 @@ class Items{
             return false;
         }
     }
-    
 }
 
 ?>
