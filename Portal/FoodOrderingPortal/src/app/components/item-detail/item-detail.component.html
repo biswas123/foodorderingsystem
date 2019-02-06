@@ -1,0 +1,33 @@
+<mat-card class="edit-card">
+  <h3>{{page}}</h3>
+  <form [formGroup]="editForm" (ngSubmit)="save()">
+    <mat-form-field appearance="legacy" class="fullInputWidth">
+      <mat-label>Item Name</mat-label>
+      <input formControlName="Name" name="name" matInput autocomplete="off">
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy" class="fullInputWidth">
+      <mat-label>Item description</mat-label>
+      <input formControlName="Description" name="description" matInput autocomplete="off">
+    </mat-form-field>
+    <mat-form-field appearance="legacy" class="fullInputWidth">
+      <mat-label>Item price</mat-label>
+      <input type="number" formControlName="Price" name="price" matInput autocomplete="off">
+    
+      <span matSuffix>.00</span>
+    </mat-form-field>
+    <mat-form-field class="fullInputWidth">
+      <mat-select placeholder="Category" formControlName="CategoryID" name="category">
+        <mat-option *ngFor="let category of categories" [value]="category.CategoryID">{{category.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <section class="checkboxWrapper">
+      <mat-checkbox formControlName="Available" name="available">Available</mat-checkbox>
+    </section>
+
+    <div class="footerBtn">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!editForm.valid || !editForm.dirty">Save</button>
+      <button mat-raised-button color="warn" type="button" (click)="delete()" *ngIf="id != 0">Delete</button>
+    </div>
+  </form>
+</mat-card>

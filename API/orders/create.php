@@ -1,8 +1,9 @@
 <?php
 // required headers
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
@@ -26,7 +27,7 @@ if (!empty($data->orderDateTime) &&  !empty($data->customerId) && !empty($data->
     $Orders->customerId = $data->customerId;
     $Orders->companyId = $data->companyId;
     $Orders->deliveryId = $data->deliveryId;
-    $Orders->orderstatusId = $data->orderstatusId ?? 0;
+    $Orders->orderstatusId = $data->orderstatusId ?? 1;
     
     if ($Orders->create()) {
         http_response_code(200);

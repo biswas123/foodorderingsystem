@@ -44,7 +44,7 @@ class Items{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `items`  WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `Name` ASC";
+        $query = "SELECT i.*, c.Name AS `CategoryName` FROM `items` i JOIN `Categories` c on i.CategoryID = c.CategoryID  WHERE i.CompanyID = ? AND i.DateDeleted IS NULL ORDER BY i.Name ASC";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $this->companyId);
         $stmt->execute();

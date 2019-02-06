@@ -1,11 +1,16 @@
 <?php
 // required headers
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
- 
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}"); exit(0); 
+}
+    
 
 // include database and object files
 include_once '../config/connection.php';
@@ -25,7 +30,7 @@ if(!empty($data->itemId)  && !empty($data->categoryId) && !empty($data->companyI
     $Items->itemId = $data->itemId; 
     $Items->name = $data->name ?? NULL;
     $Items->description = $data->description ?? NULL;
-    $Items->price = $date->price ?? 0;
+    $Items->price = $data->price ?? 0;
     $Items->available = $data->available ?? 1;
     $Items->image = $data->image ?? NULL;
     $Items->categoryId = $data->categoryId;

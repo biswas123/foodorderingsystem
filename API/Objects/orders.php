@@ -22,7 +22,7 @@ class Orders{
         $conn = $this->conn;
         $query = "INSERT INTO `orders` (`OrderDateTime`, `CustomerID`,`CompanyID`, `DeliveryID`, `OrderStatusID`) VALUES (?, ?, ? ,? , ? )";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("isiiii", $this->orderDateTime, $this->customerId, $this->companyId, $this->deliveryId, $this->orderstatusId);
+        $stmt->bind_param("siiii", $this->orderDateTime, $this->customerId, $this->companyId, $this->deliveryId, $this->orderstatusId);
       
         if ($stmt->execute()) {
             $stmt->close();

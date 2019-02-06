@@ -1,5 +1,6 @@
 <?php
 
+include_once '../utilities/emailsender.php';
 class Employees{
  
     // database connection and table name
@@ -11,6 +12,10 @@ class Employees{
     public $password;
     public $roleId;
     public $companyId;
+    public $firstname;
+    public $lastname;
+    public $contactnumber;
+    public $address;
     
  
     // constructor with $db as database connection
@@ -20,11 +25,12 @@ class Employees{
 
     public function create(){
         $conn = $this->conn;
-        $query = "INSERT INTO `employees` (`UserName`,`Password`, `RoleID`, `CompanyID`) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO `employees` (`UserName`, `FirstName`, `LastName`, `ContactNumber`, `Address`, `Email`, `RoleID`, `CompanyID`) VALUES (?, ?, ?, ?, ?, ?, ? ,? )";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssii", $this->username, $this->password, $this->roleId, $this->companyId);
+        $stmt->bind_param("ssssssii", $this->username, $this->firstname, $this->lastname, $this->contactnumber, $this->address, $this->email, $this->roleId, $this->companyId);
       
         if ($stmt->execute()) {
+           // send_email('biswash.khayargoli@gmail.com', 'new-user');
             $stmt->close();
             return true;
         } else {
@@ -41,7 +47,7 @@ class Employees{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `employees`  WHERE `CompanyID` = ? AND DateDeleted IS NULL ORDER BY `UserName` ASC";
+        $query = "SELECT e.EmployeeID, e.UserName, e.FirstName, e.LastName, e.ContactNumber,  e.Address, e.Email, r.Name AS `RoleName` FROM `employees` e JOIN `roles` r ON e.RoleID = r.RoleID  WHERE e.CompanyID = ? AND e.DateDeleted IS NULL ORDER BY e.UserName ASC";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $this->companyId);
         $stmt->execute();
@@ -63,7 +69,7 @@ class Employees{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "SELECT * FROM `employees` WHERE DateDeleted IS NULL AND `EmployeeID` = ?";
+        $query = "SELECT `EmployeeID`, `UserName`, `FirstName`, `LastName`, `ContactNumber`, `Address`, `RoleID`, `Email` FROM `employees` WHERE DateDeleted IS NULL AND `EmployeeID` = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $this->employeeId);
         $stmt->execute();
@@ -84,9 +90,9 @@ class Employees{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `employees` SET `UserName` = ?, `Password` = ?, `RoleId` = ? WHERE `EmployeeID` = ?";
+        $query = "UPDATE `employees` SET `UserName` = ?, `FirstName` =? , `LastName` = ?, `ContactNumber` = ?, `Address` = ?, `Email` = ?, `RoleId` = ? WHERE `EmployeeID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssii", $this->username, $this->password, $this->roleId, $this->employeeId);
+        $stmt->bind_param("ssssssii", $this->username, $this->firstname, $this->lastname, $this->contactnumber, $this->address, $this->email, $this->roleId, $this->employeeId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 

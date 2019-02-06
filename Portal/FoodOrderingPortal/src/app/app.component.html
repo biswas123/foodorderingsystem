@@ -1,0 +1,55 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+<mat-sidenav-container >
+    <mat-sidenav #sidenav mode="side" [opened]="true"  *ngIf="isLoggedIn$ | async">
+        <mat-list id="sidenavlist">
+            <h3 matSubheader>Menu</h3>
+            <mat-list-item routerLink="/" [routerLinkActive]="['is-active']"
+                [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon mat-list-icon>dashboard</mat-icon>
+                <h5 mat-line>Dashboard</h5>
+
+            </mat-list-item>
+            <mat-list-item routerLink="/category" [routerLinkActive]="['is-active']">
+                <mat-icon mat-list-icon>category</mat-icon>
+                <h5 mat-line>Categories</h5>
+            </mat-list-item>
+            <mat-list-item routerLink="/items" [routerLinkActive]="['is-active']">
+                <mat-icon mat-list-icon>fastfood</mat-icon>
+                <h5 mat-line>Food Items</h5>
+            </mat-list-item>
+
+            <mat-list-item routerLink="/orders" [routerLinkActive]="['is-active']">
+                <mat-icon mat-list-icon>list_alt</mat-icon>
+                <h5 mat-line>Orders</h5>
+            </mat-list-item>
+
+            <mat-list-item routerLink="/employees" [routerLinkActive]="['is-active']">
+                <mat-icon mat-list-icon>people</mat-icon>
+                <h5 mat-line>Employees</h5>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+            <h3 matSubheader>Admin Controls</h3>
+
+            <mat-list-item routerLink="/settings"  [routerLinkActive]="['is-active']">
+                <mat-icon mat-list-icon>settings</mat-icon>
+
+                <h5 mat-line>Settings</h5>
+            </mat-list-item>
+        </mat-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar color="primary" *ngIf="isLoggedIn$ | async">
+            <mat-toolbar-row>
+              <!--   <mat-icon class="navbar-icon" (click)="sidenav.toggle()">menu</mat-icon> -->
+                <span class="navbar-spacer"></span>
+                <mat-icon class="navbar-icon" (click)="onBackClick()" *ngIf="showBackBtn">arrow_back_ios</mat-icon>
+                <mat-icon class="navbar-icon" (click)="onLogout()" *ngIf="showLogoutBtn">logout</mat-icon>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+<app-loading></app-loading>

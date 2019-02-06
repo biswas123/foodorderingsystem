@@ -20,9 +20,9 @@ class Categories{
     public function create(){
         
         $conn = $this->conn;
-        $query = "INSERT INTO `categories` (`Name`, `Description`, `CompanyId`, `Image`) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO `categories` (`Name`, `Description`, `CompanyId`, `Image`, `Available`) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssis", $this->name, $this->description, $this->companyId, $this->image);
+        $stmt->bind_param("ssisi", $this->name, $this->description, $this->companyId, $this->image, $this->available);
       
         if ($stmt->execute()) {
             $stmt->close();
@@ -83,9 +83,9 @@ class Categories{
         $conn = $this->conn;
         $returnArr = array();
 
-        $query = "UPDATE `categories` SET `Name` = ?, `Description` = ?, `Image` = ? WHERE`categoryID` = ?";
+        $query = "UPDATE `categories` SET `Name` = ?, `Description` = ?, `Image` = ?, `Available` = ? WHERE`categoryID` = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssis", $this->name, $this->description, $this->categoryId, $this->image);
+        $stmt->bind_param("ssisi", $this->name, $this->description,  $this->image,  $this->available, $this->categoryId);
         $stmt->execute();
         $num  = $stmt->affected_rows;
 
