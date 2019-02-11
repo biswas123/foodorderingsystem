@@ -14,12 +14,12 @@ import { EmployeeDetailComponent } from './components/employee-detail/employee-d
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: DashBoardComponent, canActivate: [AuthGuard] },
-  { path: 'category', component: CategoryComponent },
-  { path: 'category-detail/:id', component: CategoryDetailComponent },
-  { path: 'items', component: ItemsComponent },
-  { path: 'item-detail/:id', component: ItemDetailComponent },
-  { path: 'employees', component: EmployeesComponent },
-  { path: 'employee-detail/:id', component: EmployeeDetailComponent }
+  { path: 'category', component: CategoryComponent , canActivate: [AuthGuard]},
+  { path: 'category-detail/:id', component: CategoryDetailComponent , canActivate: [AuthGuard]},
+  { path: 'items', component: ItemsComponent , canActivate: [AuthGuard]},
+  { path: 'item-detail/:id', component: ItemDetailComponent, canActivate: [AuthGuard] },
+  { path: 'employees', component: EmployeesComponent, canActivate: [AuthGuard] },
+  { path: 'employee-detail/:id', component: EmployeeDetailComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

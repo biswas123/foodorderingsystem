@@ -30,7 +30,18 @@ class Employees{
         $stmt->bind_param("ssssssii", $this->username, $this->firstname, $this->lastname, $this->contactnumber, $this->address, $this->email, $this->roleId, $this->companyId);
       
         if ($stmt->execute()) {
-           // send_email('biswash.khayargoli@gmail.com', 'new-user');
+           
+            $email_query = "SELECT `Email` FROM `employees` WHERE `EmployeeID`= LAST_INSERT_ID()";
+            $email_stmt = $conn->prepare($email_query);
+            $email_stmt->execute();
+            $rs = $email_stmt->get_result();            
+            $rows = mysqli_fetch_assoc($rs);
+            
+            $recepients = array($rows['Email']);
+            $emailSender = new EmailSender($recepients, 'account_created');
+            $emailSender->sendEmail();
+
+            $email_stmt->close();
             $stmt->close();
             return true;
         } else {

@@ -5,6 +5,7 @@ import { Category } from '../../objects/category';
 import { GenericDialogComponent } from '../../dialogs/generic-dialog/generic-dialog.component'
 import { Router } from "@angular/router";
 import { AppComponent } from 'src/app/app.component';
+import { ConfirmDialogComponent } from 'src/app/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-category',
@@ -14,13 +15,13 @@ import { AppComponent } from 'src/app/app.component';
 
 
 export class CategoryComponent implements OnInit {
-  displayedColumns: string[] = ['Name', 'Description', 'Available'];
+  displayedColumns: string[] = ['Name', 'Description', 'Available','Action'];
   dataSource: MatTableDataSource<Category>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private app: AppComponent, private messageDialog: GenericDialogComponent, private apiService: APIService, private router: Router) {
+  constructor(private app: AppComponent, private messageDialog: GenericDialogComponent,private confirmDialog: ConfirmDialogComponent, private apiService: APIService, private router: Router) {
     this.app.showBackBtn = true;
   }
 
@@ -35,9 +36,9 @@ export class CategoryComponent implements OnInit {
     this.router.navigate(['category-detail', 0]);
   }
 
-  getCategories() {
+  private getCategories() {
     this.apiService.getCategories().subscribe((data) => {
-      const categories = JSON.parse(data['Message']);
+      const categories = JSON.parse(data.Message);
       this.dataSource = new MatTableDataSource(categories);
 
       console.log(categories);
@@ -60,4 +61,22 @@ export class CategoryComponent implements OnInit {
   editCategory(category: Category): void {
     this.router.navigate(['category-detail', category.CategoryID]);
   };
+
+  delete(categoryId : any) {
+    var params = {
+      "categoryId": categoryId
+    };
+    this.confirmDialog.displayConfirmMessageDialog('Are you sure you want to delete this item?').afterClosed().subscribe(result => {
+      if (result) {
+        this.apiService.deleteCategory(params)
+          .subscribe(data => {
+            this.getCategories(); 
+          }, (error) => {
+            console.log(error);
+            this.messageDialog.displayMessageDialog(error);
+          });
+      }
+    });
+
+  }
 }

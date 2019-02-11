@@ -45,7 +45,7 @@ export class EmployeeDetailComponent implements OnInit {
       this.apiService.getEmployeeByID(params)
         .subscribe(data => {
           console.log(data);
-          var details = JSON.parse(data['Message'])[0];
+          var details = JSON.parse(data.Message)[0];
           this.editForm.patchValue(details);
         }, (error) => {
           console.log(error);
@@ -56,7 +56,7 @@ export class EmployeeDetailComponent implements OnInit {
 
   getRoles() {
     this.apiService.getRoles().subscribe((data) => {
-      this.roles = JSON.parse(data['Message']);
+      this.roles = JSON.parse(data.Message);
     }, (error) => {
       console.log(error);
       this.messageDialog.displayMessageDialog(error);

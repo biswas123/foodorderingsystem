@@ -22,7 +22,7 @@ export class AuthService {
     private messageDialog: GenericDialogComponent) {}
 
   isSessionPresent() {
-    return (localStorage.session && localStorage.session == '1')  ? true : false;
+    return (sessionStorage.session && sessionStorage.session == '1')  ? true : false;
   }
 
   login(user: User){
@@ -35,9 +35,9 @@ export class AuthService {
       };
 
       this.apiService.login(objParam).subscribe((data) => {
-        if(data['Status'] == 200 && data['Message'] == "Success" ) {
+        if(data.Status == 200 && data.Message == "Success" ) {
           this.loggedIn.next(true);
-          localStorage.session = "1";
+          sessionStorage.session = "1";
           this.router.navigate(['/']);
         }
       }, (error) => {
@@ -47,9 +47,10 @@ export class AuthService {
     }
   }
 
-  logout() {                      
+  logout() {      
+                    
     this.loggedIn.next(false);
-    localStorage.session = "0";
+    sessionStorage.session = "0";
     this.router.navigate(['/login']);
   }
 }

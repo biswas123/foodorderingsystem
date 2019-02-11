@@ -40,7 +40,7 @@ export class ItemDetailComponent implements OnInit {
       var params = { "itemId": this.id };
       this.apiService.getItemByID(params)
         .subscribe(data => {
-          var details = JSON.parse(data['Message'])[0];
+          var details = JSON.parse(data.Message)[0];
           this.editForm.patchValue(details);
         }, (error) => {
           console.log(error);
@@ -52,7 +52,7 @@ export class ItemDetailComponent implements OnInit {
 
   getCategories() {
     this.apiService.getCategories().subscribe((data) => {
-      this.categories = JSON.parse(data['Message']);
+      this.categories = JSON.parse(data.Message);
     }, (error) => {
       console.log(error);
       this.messageDialog.displayMessageDialog(error);

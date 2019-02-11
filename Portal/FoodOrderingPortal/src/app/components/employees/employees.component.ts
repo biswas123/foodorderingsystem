@@ -16,7 +16,7 @@ import { Employees } from 'src/app/objects/employee';
 
 
 export class EmployeesComponent implements OnInit {
-  displayedColumns: string[] = ['UserName', 'FirstName', 'RoleName',  'ContactNumber'];
+  displayedColumns: string[] = ['UserName', 'FirstName', 'RoleName',  'ContactNumber', 'Action'];
   dataSource: MatTableDataSource<Items>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -40,7 +40,7 @@ export class EmployeesComponent implements OnInit {
 
   getEmployees() {
     this.apiService.getEmployees().subscribe((data) => {
-      const employees = JSON.parse(data['Message']);
+      const employees = JSON.parse(data.Message);
       this.dataSource = new MatTableDataSource(employees);
 
       console.log(employees);

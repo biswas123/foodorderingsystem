@@ -36,7 +36,7 @@ export class CategoryDetailComponent implements OnInit {
       var params = { "categoryId": this.id };
       this.apiService.getCategoryByID(params)
         .subscribe(data => {
-          var details = JSON.parse(data['Message'])[0];
+          var details = JSON.parse(data.Message)[0];
           this.editForm.patchValue(details);
         }, (error) => {
           console.log(error);
